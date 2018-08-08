@@ -24,12 +24,19 @@ public class GameManager
     {
         for (int i = 0; i <boxes.length; i++)
         {
-            try {
-                player.addReward(boxes[i].getReward());
-            } catch (Box.ExtraLifeException e) {
+            if(boxes[i].getValue()==Box.BoxValue.EU100||
+                boxes[i].getValue()==Box.BoxValue.EU20||
+                boxes[i].getValue()==Box.BoxValue.EU5)
+                {
+                    player.addReward(boxes[i].getReward());
+                }
+            else if(boxes[i].getValue()==Box.BoxValue.EXTRA_LIFE)
+            {
                 extraLife = true;
                 continue;
-            } catch (Box.GameOverException e) {
+            }
+            else if(boxes[i].getValue()==Box.BoxValue.GAME_OVER)
+            {
                 if(extraLife)
                 {
                     extraLife = false;

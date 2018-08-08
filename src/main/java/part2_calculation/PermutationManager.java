@@ -59,12 +59,19 @@ public class PermutationManager {
 
         for (int i = 0; i <boxArrayToPlay.length; i++)
         {
-            try {
+            if(boxArrayToPlay[i].getValue()==Box.BoxValue.EU100||
+                    boxArrayToPlay[i].getValue()==Box.BoxValue.EU20||
+                    boxArrayToPlay[i].getValue()==Box.BoxValue.EU5)
+            {
                 player.addReward(boxArrayToPlay[i].getReward());
-            } catch (Box.ExtraLifeException e) {
+            }
+            else if(boxArrayToPlay[i].getValue()==Box.BoxValue.EXTRA_LIFE)
+            {
                 extraLife = true;
                 continue;
-            } catch (Box.GameOverException e) {
+            }
+            else if(boxArrayToPlay[i].getValue()==Box.BoxValue.GAME_OVER)
+            {
                 if(extraLife)
                 {
                     extraLife = false;
@@ -109,7 +116,7 @@ public class PermutationManager {
                 System.out.println("Sum: " + resultCounter.getSum() + "; permutationsCounter: " + resultCounter.getCounter()
                         + "; Average: "+resultCounter.getAverage());
                 }
-                    gcCounter=0;
+                gcCounter=0;
             }
             resultCounter.addSum(getPossibleResultsFromGame((Box[])arrayList.toArray()));
             resultCounter.addCounter(12);
