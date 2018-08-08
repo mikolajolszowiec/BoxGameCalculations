@@ -7,15 +7,14 @@ import settings.Setup;
 
 public class PermutationManager {
 
-    private Box[] boxes;
     private int gcCounter =0;
 
     class ResultCounter
     {
-        private long sum=0;
+        private double sum=0;
         private long counter=0;
 
-        public void addSum(long i)
+        public void addSum(double i)
         {
             sum+=i;
         }
@@ -25,7 +24,7 @@ public class PermutationManager {
             counter+=i;
         }
 
-        public long getSum() {
+        public double getSum() {
             return sum;
         }
 
@@ -35,22 +34,22 @@ public class PermutationManager {
 
         public double getAverage()
         {
-            return (double)sum/(double)counter;
+            return sum/(double)counter;
         }
     }
 
     public PermutationManager() {
-        this.boxes = new BoxesGenerator().generateBoxes(false);
     }
 
     public Double countAverageResult()
     {
         ResultCounter resultCounter = new ResultCounter();
-        countSumBoxesArray(java.util.Arrays.asList(boxes), 0, resultCounter);
+        Box[] boxes = new BoxesGenerator().generateBoxes(false);
+        sumUpAveragesFromBoxPermutations(java.util.Arrays.asList(boxes), 0, resultCounter);
         return resultCounter.getAverage();
     }
 
-    private int getPossibleResultsFromGame(Box[] boxArrayToPlay)
+    public double getAverageResultFromGameScenarios(Box[] boxArrayToPlay)
     {
         int[] result = new int[6];
         Player player = new Player();
@@ -94,15 +93,15 @@ public class PermutationManager {
             }
         }
         gcCounter++;
-        return 3*(result[0]+result[1]+result[2])+result[3]+result[4]+result[5];
+        return (double)(3*(result[0]+result[1]+result[2])+result[3]+result[4]+result[5])/12;
     }
 
-    private void countSumBoxesArray(java.util.List<Box> arrayList, int element, ResultCounter resultCounter)
+    private void sumUpAveragesFromBoxPermutations(java.util.List<Box> arrayList, int element, ResultCounter resultCounter)
     {
         for (int i = element; i < arrayList.size(); i++)
         {
             java.util.Collections.swap(arrayList, i, element);
-            countSumBoxesArray(arrayList, element + 1, resultCounter);
+            sumUpAveragesFromBoxPermutations(arrayList, element + 1, resultCounter);
             java.util.Collections.swap(arrayList, element, i);
         }
         if (element == arrayList.size() - 1)
@@ -118,8 +117,8 @@ public class PermutationManager {
                 }
                 gcCounter=0;
             }
-            resultCounter.addSum(getPossibleResultsFromGame((Box[])arrayList.toArray()));
-            resultCounter.addCounter(12);
+            resultCounter.addSum(getAverageResultFromGameScenarios((Box[])arrayList.toArray()));
+            resultCounter.addCounter(1);
         }
     }
 }

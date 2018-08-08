@@ -4,7 +4,7 @@ import org.junit.Assert;
 import part1_simulation.SimulationManager;
 import part2_calculation.PermutationManager;
 
-public class GameManagerTest {
+public class GameTest {
 
     @org.junit.Test
     public void testSimulation()

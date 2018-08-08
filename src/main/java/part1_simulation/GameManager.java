@@ -8,28 +8,23 @@ import java.util.Random;
 
 public class GameManager
 {
-    private Box[] boxes;
-    private Player player;
-    private boolean extraLife;
-    private boolean secondChance;
 
     public GameManager() {
-        boxes = new BoxesGenerator().generateBoxes(true);
-        player = new Player();
-        extraLife = false;
-        secondChance = true;
     }
 
-    public int runGame()
+    public int simulateGameResult(Box[] boxes)
     {
+        Player player = new Player();
+        boolean extraLife = false;
+        boolean secondChance = true;
         for (int i = 0; i <boxes.length; i++)
         {
             if(boxes[i].getValue()==Box.BoxValue.EU100||
                 boxes[i].getValue()==Box.BoxValue.EU20||
                 boxes[i].getValue()==Box.BoxValue.EU5)
-                {
-                    player.addReward(boxes[i].getReward());
-                }
+            {
+                player.addReward(boxes[i].getReward());
+            }
             else if(boxes[i].getValue()==Box.BoxValue.EXTRA_LIFE)
             {
                 extraLife = true;
@@ -43,18 +38,24 @@ public class GameManager
                     continue;
                 }
                 else {
-                    if (secondChance) { //this scenario describes what happen if player doesn't get second chance
-                        if(!trySecondChance(true)) break;
+                    if (secondChance)
+                    { //this scenario describes what happen if player doesn't get second chance
+                        if(!trySecondChance(player, true))
+                        {
+                            break;
+                        }
                         secondChance = false;
                         continue;
-                    } else {    //this scenario describes what happen after player get second chance
-                        trySecondChance(false);
+                    }
+                    else
+                    {    //this scenario describes what happen after player get second chance
+                        trySecondChance(player, false);
                         break;
                     }
                 }
             }
         }
-        return getPlayersReward();
+        return getPlayersReward(player);
     }
 
     private int randomInt(int length)
@@ -63,15 +64,16 @@ public class GameManager
         return random.nextInt(length);
     }
 
-    private int getPlayersReward()
+    private int getPlayersReward(Player player)
     {
         return player.getReward();
     }
 
-    private boolean trySecondChance(boolean secondChance)
+    private boolean trySecondChance(Player player, boolean secondChance)
     {
        int i= randomInt(secondChance?4:3);
-       switch(i){
+       switch(i)
+       {
            case 0: player.addReward(20); return false;
            case 1: player.addReward(10); return false;
            case 2: player.addReward(5); return false;
